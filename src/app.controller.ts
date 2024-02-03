@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Render, Sse } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Render, Res, Sse } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Observable, from } from 'rxjs';
 
@@ -7,19 +7,17 @@ export class AppController {
   constructor(private readonly appService: AppService) { }
 
   @Get()
-  @Render('index')
-  root() {
-    return { message: this.appService.getHello() }
+  root(@Res() res) {
+    return res.sendFile('index.html', { root: 'website' });
   }
 
-  @Get('create')
+  @Get('api/create')
   createChat() {
     let chat = this.appService.createChat();
     return { chat: chat };
   }
 
-  @Get('chat/:id')
-  @Render('chat')
+  @Get('api/chat/:id')
   getChat(@Param('id') id: string) {
     let chat = this.appService.getChat(id);
     if (chat) {
@@ -29,7 +27,7 @@ export class AppController {
     }
   }
 
-  @Post('chat/:id')
+  @Post('api/chat/:id')
   addMessageToChat(@Param('id') id: string, @Body() body: { message: string, sender: string }) {
     if (!body.message || !body.sender) {
       return { error: 'Message and sender are required' };
@@ -38,7 +36,7 @@ export class AppController {
     return { chat: chat };
   }
 
-  @Sse('chat/:id/stream')
+  @Sse('api/chat/:id/stream')
   stream(@Param('id') id: string) {
     let observable = from(this.appService.getChat(id).messages);
     if (observable) {
