@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
 import { HomeComponent } from './home/home.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,7 @@ import { FrontpageComponent } from './frontpage/frontpage.component';
     HomeComponent,
     FrontpageComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })
