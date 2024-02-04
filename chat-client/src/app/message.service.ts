@@ -7,17 +7,17 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class MessageService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  createChat(): Observable<any> {
-    return this.http.get('http://localhost:3000/api/create');
+  createChat(password: string): Observable<any> {
+    return this.http.get(`http://localhost:3000/api/create/${password}`);
   }
 
   getChat(id: number): Observable<any> {
     return this.http.get(`http://localhost:3000/api/chat/${id}`);
   }
 
-  postChat(id: number, message: string, key: string): Observable<any> {
+  postChat(id: string, message: string, key: string): Observable<any> {
     const encryptedMessage = this.encryptMessage(message, key);
     return this.http.post(`http://localhost:3000/api/chat/${id}`, {
       message: encryptedMessage,
@@ -28,7 +28,7 @@ export class MessageService {
     return this.http.get(`http://localhost:3000/api/chat/${id}/stream`);
   }
 
-  private encryptMessage(message: string, key: string): string {
+  encryptMessage(message: string, key: string): string {
     return CryptoJS.AES.encrypt(message, key).toString();
   }
 

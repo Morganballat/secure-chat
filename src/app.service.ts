@@ -10,10 +10,11 @@ export class AppService {
     return 'Hello World!';
   }
 
-  createChat(): Chat {
+  createChat(password: string): Chat {
     let chat = {
       id: this.generateUniqueID(),
-      messages: []
+      messages: [],
+      password: password
     }
     this.chats.push(chat);
     return chat;

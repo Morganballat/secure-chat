@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-// import * as hash from "hash.js";
+import * as hash from "hash.js";
+import { MessageService } from '../message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-frontpage',
@@ -9,16 +11,19 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./frontpage.component.scss'],
 })
 export class FrontpageComponent {
+  constructor(private messageService: MessageService, private router: Router) { }
+
+
   password: string = '';
 
-  // hashAndSend() {
-  //   const hashedPassword = hash.sha256().update(this.password).digest('hex');
-  //   // Envoyer le mot de passe hashé au serveur (vous devez implémenter cette fonction)
-  //   this.sendToServer(hashedPassword);
-  // }
+  hashAndSend() {
+    const hashedPassword = hash.sha256().update(this.password).digest('hex');
+    this.sendToServer(hashedPassword);
+  }
 
-  // sendToServer(hashedPassword: string) {
-  //   // Remplacez cette fonction par la logique réelle pour envoyer le mot de passe au serveur
-  //   console.log('Mot de passe hashé envoyé au serveur :', hashedPassword);
-  // }
+  sendToServer(hashedPassword: string) {
+    this.messageService.createChat(hashedPassword).subscribe((res) => {
+      this.router.navigate(['/chat', res.chat.id]);
+    });
+  }
 }

@@ -1,19 +1,20 @@
 import { Body, Controller, Get, Param, Post, Render, Res, Sse } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Observable, from } from 'rxjs';
+import * as hash from "hash.js";
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) { }
 
-  @Get()
-  root(@Res() res) {
-    return res.sendFile('index.html', { root: 'website' });
-  }
-
-  @Get('api/create')
-  createChat() {
-    let chat = this.appService.createChat();
+  @Get('api/create/:password')
+  async createChat(@Param('password') password: string) {
+    if (!password) {
+      return { error: 'no password provided' };
+    }
+    //const hashed = hash.sha256().update(password).digest('hex');
+    //console.log(hashed);
+    let chat = this.appService.createChat(password);
     return { chat: chat };
   }
 
