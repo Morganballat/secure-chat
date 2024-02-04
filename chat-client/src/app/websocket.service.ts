@@ -29,7 +29,11 @@ export class WebsocketService {
     };
   }
 
-  // sendMessage(message: string): void {
-  //   this.socket.send(message);
-  // }
+  sendMessage(message: string): void {
+    if (this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(message);
+    } else {
+      console.error("La connexion WebSocket n'est pas ouverte.");
+    }
+  }
 }

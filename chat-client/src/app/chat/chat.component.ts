@@ -13,12 +13,16 @@ export class ChatComponent {
   messages: string[] = [];
   constructor(
     private messageService: MessageService,
-    private websocketService: WebsocketService,
+    private webSocketService: WebsocketService,
   ) {}
 
   sendMessage(id: number, message: string, key: string) {
-    const encryptedMessage = this.messageService.postChat(id, message, key);
-    // this.websocketService.sendMessage(this.message);
+    const encryptedMessage = this.messageService
+      .postChat(id, message, key)
+      .subscribe((response: any) => {
+        const encryptedMessage = response.encryptedMessage;
+        this.webSocketService.sendMessage(encryptedMessage);
+      });
     this.receiveMessage(this.message);
     this.message = '';
   }

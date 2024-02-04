@@ -1,8 +1,14 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ChatGateway } from './chat/chat.gateway';
 import { ClientMiddleware } from './client.middleware';
+import * as cors from 'cors';
 
 @Module({
   imports: [],
@@ -11,9 +17,9 @@ import { ClientMiddleware } from './client.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ClientMiddleware).forRoutes({
+    consumer.apply(cors()).forRoutes({
       path: '/**',
-      method: RequestMethod.ALL
+      method: RequestMethod.ALL,
     });
   }
 }
