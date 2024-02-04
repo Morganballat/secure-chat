@@ -14,14 +14,15 @@ export class ChatComponent {
 
   sendMessage(message: string, key: string) {
     const encryptedMessage = this.messageService.encryptMessage(message, key);
-    console.log(encryptedMessage);
+    this.receiveMessage(encryptedMessage);
+    this.message = '';
   }
 
-  receiveMessage(encryptedMessage: string, key: string) {
+  receiveMessage(encryptedMessage: string) {
     const decryptedMessage = this.messageService.decryptMessage(
       encryptedMessage,
-      key,
+      this.encryptionKey,
     );
-    console.log(decryptedMessage);
+    this.messages.push(decryptedMessage);
   }
 }
